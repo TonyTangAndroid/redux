@@ -8,7 +8,6 @@ dependencies {
     api 'org.json:json:20180813'
     api 'com.neovisionaries:nv-websocket-client:2.6'
     api 'io.github.sac:SocketclusterClientJava:1.7.2'
-    testImplementation 'io.reactivex:rxjava:1.3.4'
     testImplementation 'junit:junit:4.12'
 }
 

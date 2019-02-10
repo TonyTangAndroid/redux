@@ -25,10 +25,8 @@ android {
 }
 
 dependencies {
-    api project(':redux-core')
-    api project(':redux-android')
-    api project(':redux-android-lifecycle')
     api project(':redux-thunk')
+    api project(':redux-android-lifecycle')
     api 'androidx.appcompat:appcompat:1.1.0-alpha02'
     api 'com.google.android.material:material:1.1.0-alpha03'
     api 'com.google.auto.value:auto-value-annotations:1.6.3'
