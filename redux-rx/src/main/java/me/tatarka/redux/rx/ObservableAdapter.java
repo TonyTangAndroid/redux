@@ -15,7 +15,7 @@ import rx.observers.SerializedObserver;
 public class ObservableAdapter {
 
     public static <S> Observable<S> observable(final SimpleStore<S> store) {
-        return Observable.fromEmitter(new Action1<Emitter<S>>() {
+        return Observable.create(new Action1<Emitter<S>>() {
             @Override
             public void call(Emitter<S> emitter) {
                 store.addListener(new EmitterListener<>(emitter, store));

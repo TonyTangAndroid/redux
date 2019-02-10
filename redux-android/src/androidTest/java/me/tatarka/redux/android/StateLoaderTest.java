@@ -101,7 +101,7 @@ public class StateLoaderTest {
     }
 
     private static <T> Observable<T> fromLoader(final Loader<T> loader) {
-        return Observable.fromEmitter(new Action1<Emitter<T>>() {
+        return Observable.create(new Action1<Emitter<T>>() {
             @Override
             public void call(final Emitter<T> emitter) {
                 final Loader.OnLoadCompleteListener<T> listener = new Loader.OnLoadCompleteListener<T>() {
