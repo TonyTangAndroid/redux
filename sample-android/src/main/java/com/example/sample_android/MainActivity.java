@@ -12,33 +12,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.sample_android.action.Action;
-import com.example.sample_android.action.Check;
 import com.example.sample_android.action.LoadActionCreator;
-import com.example.sample_android.action.Remove;
-import com.example.sample_android.state.TodoItem;
 import com.example.sample_android.state.TodoList;
 import com.example.sample_android.store.MainStore;
-
-import java.util.Collections;
-import java.util.List;
 
 import me.tatarka.redux.ReplayMiddleware;
 
@@ -48,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     MainStore store;
     ReplayMiddleware<TodoList, Action, Action> replayMiddleware;
-    Adapter adapter = new Adapter();
-    ActionListAdapter actionListAdapter = new ActionListAdapter();
+    ToDoItemAdapter adapter = new ToDoItemAdapter(this);
+    ActionListAdapter actionListAdapter = new ActionListAdapter(this);
     ProgressBar loading;
     FloatingActionButton fab;
 
@@ -168,161 +152,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return registry;
     }
 
-    class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
-
-        private List<TodoItem> items = Collections.emptyList();
-
-        public void setState(final TodoList list) {
-            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return items.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return list.items().size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return items.get(oldItemPosition).id() == list.items().get(newItemPosition).id();
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    return items.get(oldItemPosition).equals(list.items().get(newItemPosition));
-                }
-            });
-            this.items = list.items();
-            result.dispatchUpdatesTo(this);
-        }
-
-        @NonNull
-        @Override
-        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new Holder(store, LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull Holder holder, int position) {
-            holder.bind(items.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-
-        class Holder extends RecyclerView.ViewHolder {
-            final MainStore store;
-            final CheckBox checkBox;
-            final ImageButton edit;
-            final ImageButton delete;
-
-            TodoItem item;
-
-            Holder(final MainStore store, View itemView) {
-                super(itemView);
-                checkBox = itemView.findViewById(R.id.item);
-                edit = itemView.findViewById(R.id.edit);
-                delete = itemView.findViewById(R.id.delete);
-                this.store = store;
-
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (item.done() != isChecked) {
-                            store.dispatch(Check.create(item.id(), isChecked));
-                        }
-                    }
-                });
-
-                edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TodoItemDialogFragment.newInstance(item.id()).show(getSupportFragmentManager(), "dialog");
-                    }
-                });
-
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        store.dispatch(Remove.create(item.id()));
-                    }
-                });
-            }
-
-            void bind(TodoItem item) {
-                this.item = item;
-                checkBox.setText(item.text());
-                checkBox.setChecked(item.done());
-            }
-        }
-    }
-
-    class ActionListAdapter extends RecyclerView.Adapter<ActionListAdapter.Holder> {
-
-        List<Action> actions = Collections.emptyList();
-
-        public void setState(List<Action> actions) {
-            this.actions = actions;
-            notifyDataSetChanged();
-        }
-
-        @NonNull
-        @Override
-        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.action_item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull Holder holder, int position) {
-            holder.bind(position, actions.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return actions.size();
-        }
-
-        class Holder extends RecyclerView.ViewHolder {
-
-            final TextView textView;
-            int index;
-
-            Holder(View itemView) {
-                super(itemView);
-                textView = itemView.findViewById(R.id.action);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (replayMiddleware.isDisabled(index)) {
-                            replayMiddleware.enable(index);
-                        } else {
-                            replayMiddleware.disable(index);
-                        }
-                    }
-                });
-                textView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        EditActionDialogFragment.newInstance(index).show(getSupportFragmentManager(), "dialog");
-                        return true;
-                    }
-                });
-            }
-
-            void bind(int index, Object action) {
-                this.index = index;
-                if (replayMiddleware.isDisabled(index)) {
-                    SpannableString str = new SpannableString(action.toString());
-                    str.setSpan(new StrikethroughSpan(), 0, str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    textView.setText(str);
-                } else {
-                    textView.setText(action.toString());
-                }
-            }
-        }
-    }
 }
