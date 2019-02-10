@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.example.sample_android.action.Action;
-import com.example.sample_android.action.LoadActionCreator;
+import com.example.sample_android.action.Load;
 import com.example.sample_android.state.TodoList;
 import com.example.sample_android.store.MainStore;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import me.tatarka.redux.Thunk;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,10 +40,8 @@ public class MainActivity extends AppCompatActivity {
         store = viewModel.getStore();
 
         if (savedInstanceState == null) {
-            Thunk<Action, Action> thunk = new LoadActionCreator(new Datastore(this)).load();
-            store.dispatch(thunk);
+            store.dispatch(dispatcher -> new Datastore(this).get(items -> dispatcher.dispatch(Load.create(items))));
         }
-
         viewModel.getState().observe(this, this::render);
     }
 
