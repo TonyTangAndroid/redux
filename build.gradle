@@ -5,18 +5,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-        classpath 'ru.vyarus:gradle-pom-plugin:1.1.0'
         classpath 'com.android.tools.build:gradle:3.3.1'
     }
 }
 
 allprojects {
-    group 'me.tatarka.redux'
-    version '0.10'
-
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
