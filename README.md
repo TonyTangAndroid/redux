@@ -1,3 +1,6 @@
+(This branch encapsulates all the pull requests of forked repo and added a little more on organizing android code. )
+
+
 # redux for java/android (name tbd)
 Redux ported to java/android
 
