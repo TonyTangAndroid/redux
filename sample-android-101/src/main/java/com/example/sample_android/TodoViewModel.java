@@ -9,6 +9,6 @@ import me.tatarka.redux.android.lifecycle.StoreAndroidViewModel;
 
 public class TodoViewModel extends StoreAndroidViewModel<TodoList, MainStore> {
     public TodoViewModel(Application application) {
-        super(application, new MainStore(application));
+        super(application, new MainStore());
     }
 }

@@ -17,16 +17,14 @@ public class LoadActionCreator {
     }
 
     public Thunk<Action, Action> load() {
-        return new Thunk<Action, Action>() {
-            @Override
-            public void run(final Dispatcher<Action, Action> dispatcher) {
-                datastore.get(new Datastore.Callback() {
-                    @Override
-                    public void onList(List<TodoItem> items) {
-                        dispatcher.dispatch(Load.create(items));
-                    }
-                });
-            }
-        };
+        return this::execute;
+    }
+
+    private void execute(Dispatcher<Action, Action> dispatcher) {
+        datastore.get(items -> dispatch(dispatcher, items));
+    }
+
+    private void dispatch(Dispatcher<Action, Action> dispatcher, List<TodoItem> items) {
+        dispatcher.dispatch(Load.create(items));
     }
 }
