@@ -1,9 +1,9 @@
 package me.tatarka.redux.android.lifecycle;
 
-import android.arch.lifecycle.LiveData;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import me.tatarka.redux.SimpleStore;
 
 /**

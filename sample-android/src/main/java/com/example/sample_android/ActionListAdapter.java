@@ -1,7 +1,5 @@
 package com.example.sample_android;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +7,9 @@ import com.example.sample_android.action.Action;
 
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 class ActionListAdapter extends RecyclerView.Adapter<ActionItemViewHolder> {
 

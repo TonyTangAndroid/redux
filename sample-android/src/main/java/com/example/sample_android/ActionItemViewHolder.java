@@ -1,7 +1,7 @@
 package com.example.sample_android;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
