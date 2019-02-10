@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-  compile "me.tatarka.redux:redux-core:0.10"
-  compile "me.tatarka.redux:redux-android:0.10"
-  compile "me.tatarka.redux:redux-android-lifecycle:0.10"
-  compile "me.tatarka.redux:redux-thunk:0.10"
-  compile "me.tatarka.redux:redux-rx:0.10"
-  compile "me.tatarka.redux:redux-rx2:0.10"
+  api "me.tatarka.redux:redux-core:0.10"
+  api "me.tatarka.redux:redux-android:0.10"
+  api "me.tatarka.redux:redux-android-lifecycle:0.10"
+  api "me.tatarka.redux:redux-thunk:0.10"
+  api "me.tatarka.redux:redux-rx:0.10"
+  api "me.tatarka.redux:redux-rx2:0.10"
 }
 ```
 
@@ -215,7 +215,7 @@ You can disable/enable actions and see how that effects your ui with the replay 
 replay your modified actions back on the initial state.
 
 ```groovy
-compile "me.tatarka.redux:redux-replay:0.10"
+api "me.tatarka.redux:redux-replay:0.10"
 ```
 
 ```java
@@ -241,7 +241,7 @@ remotedev --hostname=localhost --port=8000
 ```
 
 ```groovy
-compile "me.tatarka.redux:redux-monitor:0.10"
+api "me.tatarka.redux:redux-monitor:0.10"
 ```
 
 ```java
