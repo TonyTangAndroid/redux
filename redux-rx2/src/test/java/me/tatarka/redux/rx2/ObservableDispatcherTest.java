@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -138,7 +139,7 @@ public class ObservableDispatcherTest {
         final boolean[] completableCalled = new boolean[1];
         dispatcher.dispatch(Completable.fromAction(new Action() {
             @Override
-            public void run() throws Exception {
+            public void run() {
                 completableCalled[0] = true;
             }
         }));
@@ -146,6 +147,7 @@ public class ObservableDispatcherTest {
         testSubscriber.assertValues("test1");
         assertTrue(completableCalled[0]);
     }
+
 
     @Test
     public void dispatch_empty_maybe() {
@@ -174,6 +176,21 @@ public class ObservableDispatcherTest {
         MaybeDispatcher<String> dispatcher = new MaybeDispatcher<>(Dispatcher.forStore(store, reducer));
         TestSubscriber<String> testSubscriber = FlowableAdapter.flowable(store).test();
         dispatcher.dispatch(Maybe.just("test2"));
+        testSubscriber.assertValues("test1", "test2");
+    }
+
+    @Test
+    public void dispatch_flowable() {
+        Reducer<String, String> reducer = new Reducer<String, String>() {
+            @Override
+            public String reduce(String state, String action) {
+                return action;
+            }
+        };
+        SimpleStore<String> store = new SimpleStore<>("test1");
+        FlowableDispatcher<String> dispatcher = new FlowableDispatcher<>(Dispatcher.forStore(store, reducer));
+        TestSubscriber<String> testSubscriber = FlowableAdapter.flowable(store).test();
+        dispatcher.dispatch(Flowable.just("test2"));
         testSubscriber.assertValues("test1", "test2");
     }
 }
