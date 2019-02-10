@@ -18,12 +18,7 @@ public class MainStore extends SimpleStore<TodoList> {
         super(TodoList.initial());
         Reducer<TodoList, Action> reducer = TodoListReducers.reducer();
         Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(this, reducer);
-
-        {
-            singleDispatcher = new SingleDispatcher<>(dispatcher);
-//            TestSubscriber<TodoList> testSubscriber = FlowableAdapter.flowable(store).test();
-//            testSubscriber.assertSubscribed();
-        }
+        singleDispatcher = new SingleDispatcher<>(dispatcher);
     }
 
     public void dispatch(Single<Action> single) {
