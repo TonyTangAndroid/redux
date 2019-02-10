@@ -10,3 +10,4 @@ include 'redux-android-lifecycle'
 
 include 'sample'
 include 'sample-android'
+include 'sample-android-110'
