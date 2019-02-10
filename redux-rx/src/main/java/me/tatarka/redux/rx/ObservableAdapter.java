@@ -38,7 +38,7 @@ public class ObservableAdapter {
         }
 
         @Override
-        public void cancel() throws Exception {
+        public void cancel() {
             store.removeListener(this);
         }
     }

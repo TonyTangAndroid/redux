@@ -12,7 +12,7 @@ public class MaybeDispatcher<A> extends Dispatcher<Maybe<A>, Disposable> {
     public MaybeDispatcher(final Dispatcher<A, ?> dispatcher) {
         dispatchAction = new Consumer<A>() {
             @Override
-            public void accept(A action) throws Exception {
+            public void accept(A action) {
                 dispatcher.dispatch(action);
             }
         };

@@ -12,7 +12,7 @@ public class ObservableDispatcher<A> extends Dispatcher<Observable<A>, Disposabl
     public ObservableDispatcher(final Dispatcher<A, ?> dispatcher) {
         dispatchAction = new Consumer<A>() {
             @Override
-            public void accept(A action) throws Exception {
+            public void accept(A action) {
                 dispatcher.dispatch(action);
             }
         };

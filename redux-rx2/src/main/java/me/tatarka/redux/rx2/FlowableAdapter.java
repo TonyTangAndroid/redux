@@ -15,7 +15,7 @@ public class FlowableAdapter {
     public static <S> Flowable<S> flowable(final SimpleStore<S> store) {
         return Flowable.create(new FlowableOnSubscribe<S>() {
             @Override
-            public void subscribe(FlowableEmitter<S> emitter) throws Exception {
+            public void subscribe(FlowableEmitter<S> emitter) {
                 store.addListener(new EmitterListener<>(emitter, store));
             }
         }, BackpressureStrategy.LATEST);
@@ -37,7 +37,7 @@ public class FlowableAdapter {
         }
 
         @Override
-        public void cancel() throws Exception {
+        public void cancel() {
             store.removeListener(this);
         }
     }
