@@ -1,9 +1,9 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 sourceCompatibility = 1.8
 
 dependencies {
-    implementation project(':redux-core')
-    implementation project(':redux-rx')
-    implementation 'io.reactivex:rxjava:1.2.1'
+    api project(':redux-core')
+    api project(':redux-rx')
+    api 'io.reactivex:rxjava:1.3.4'
 }
