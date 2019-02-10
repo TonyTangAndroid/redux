@@ -50,7 +50,7 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoItemViewHolder> {
     @NonNull
     @Override
     public ToDoItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ToDoItemViewHolder(this, mainActivity.store, LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false));
+        return new ToDoItemViewHolder(mainActivity.store, LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false), this.mainActivity.getSupportFragmentManager());
     }
 
     @Override

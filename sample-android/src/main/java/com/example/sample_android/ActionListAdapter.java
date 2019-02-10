@@ -27,7 +27,7 @@ class ActionListAdapter extends RecyclerView.Adapter<ActionItemViewHolder> {
     @NonNull
     @Override
     public ActionItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ActionItemViewHolder(this, LayoutInflater.from(parent.getContext()).inflate(R.layout.action_item, parent, false));
+        return new ActionItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.action_item, parent, false), this.mainActivity.getSupportFragmentManager(), this.mainActivity.replayMiddleware);
     }
 
     @Override

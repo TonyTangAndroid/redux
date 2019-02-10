@@ -1,9 +1,9 @@
 package com.example.sample_android;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import com.example.sample_android.action.Check;
@@ -12,7 +12,6 @@ import com.example.sample_android.state.TodoItem;
 import com.example.sample_android.store.MainStore;
 
 class ToDoItemViewHolder extends RecyclerView.ViewHolder {
-    private ToDoItemAdapter adapter;
     final MainStore store;
     final CheckBox checkBox;
     final ImageButton edit;
@@ -20,36 +19,30 @@ class ToDoItemViewHolder extends RecyclerView.ViewHolder {
 
     TodoItem item;
 
-    ToDoItemViewHolder(ToDoItemAdapter adapter, final MainStore store, View itemView) {
+    ToDoItemViewHolder(final MainStore store, View itemView, FragmentManager supportFragmentManager) {
         super(itemView);
-        this.adapter = adapter;
         checkBox = itemView.findViewById(R.id.item);
         edit = itemView.findViewById(R.id.edit);
         delete = itemView.findViewById(R.id.delete);
         this.store = store;
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (item.done() != isChecked) {
-                    store.dispatch(Check.create(item.id(), isChecked));
-                }
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (item.done() != isChecked) {
+                store.dispatch(Check.create(item.id(), isChecked));
             }
         });
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodoItemDialogFragment.newInstance(item.id()).show(adapter.mainActivity.getSupportFragmentManager(), "dialog");
-            }
-        });
+        edit.setOnClickListener(v -> edit(supportFragmentManager));
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                store.dispatch(Remove.create(item.id()));
-            }
-        });
+        delete.setOnClickListener(v -> edit(store));
+    }
+
+    private void edit(MainStore store) {
+        store.dispatch(Remove.create(item.id()));
+    }
+
+    private void edit(FragmentManager supportFragmentManager) {
+        TodoItemDialogFragment.newInstance(item.id()).show(supportFragmentManager, "dialog");
     }
 
     void bind(TodoItem item) {

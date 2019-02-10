@@ -1,5 +1,6 @@
 package com.example.sample_android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import com.example.sample_android.state.TodoItem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class Datastore {
 
@@ -33,6 +35,7 @@ public class Datastore {
                 .apply();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void get(final Callback callback) {
         // Yeah you can get them pretty fast, but let's pretend it's slow.
         new AsyncTask<Void, Void, List<TodoItem>>() {
@@ -43,7 +46,7 @@ public class Datastore {
                 } catch (InterruptedException e) {
                     return null;
                 }
-                String[] data = prefs.getString("data", "").split(",");
+                String[] data = Objects.requireNonNull(prefs.getString("data", "")).split(",");
                 List<TodoItem> items = new ArrayList<>(data.length);
                 for (String s : data) {
                     String[] fields = s.split(":");

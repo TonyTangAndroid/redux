@@ -3,7 +3,6 @@ package com.example.sample_android;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +26,7 @@ import me.tatarka.redux.ReplayMiddleware;
 
 public class EditActionDialogFragment extends DialogFragment {
 
-    private static final String TAG = "EditActionDialogFragmen";
+    private static final String TAG = "EditActionDialogFragment";
 
     private static final UnsafeAllocator unsafe = UnsafeAllocator.create();
 
@@ -46,6 +45,7 @@ public class EditActionDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         middleware = ViewModelProviders.of(requireActivity()).get(TodoViewModel.class).getStore().getReplayMiddleware();
+        assert getArguments() != null;
         index = getArguments().getInt("index", -1);
     }
 
@@ -65,31 +65,26 @@ public class EditActionDialogFragment extends DialogFragment {
         return new AlertDialog.Builder(requireContext(), getTheme())
                 .setTitle("Edit " + action.getClass().getSimpleName())
                 .setView(layout)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            Action newAction = unsafe.newInstance(action.getClass());
-                            for (int i = 0; i < layout.getChildCount(); i++) {
-                                TextInputLayout input = (TextInputLayout) layout.getChildAt(i);
-                                EditText editText = input.getEditText();
-                                Field field = (Field) input.getTag();
-                                field.set(newAction, toType(field, editText.getText().toString()));
-                            }
-                            middleware.replace(index, newAction);
-                        } catch (Exception e) {
-                            Log.e(TAG, e.getMessage(), e);
-                            Toast.makeText(getContext(), "Error changing action " + action.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        middleware.remove(index);
-                    }
-                })
+                .setPositiveButton("Ok", (dialog, which) -> onClick(action, layout))
+                .setNegativeButton("Delete", (dialog, which) -> middleware.remove(index))
                 .create();
+    }
+
+    private void onClick(Action action, LinearLayout layout) {
+        try {
+            Action newAction = unsafe.newInstance(action.getClass());
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                TextInputLayout input = (TextInputLayout) layout.getChildAt(i);
+                EditText editText = input.getEditText();
+                Field field = (Field) input.getTag();
+                assert editText != null;
+                field.set(newAction, toType(field, editText.getText().toString()));
+            }
+            middleware.replace(index, newAction);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            Toast.makeText(getContext(), "Error changing action " + action.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private static TextInputLayout createInput(Context context, Field field, Object action) {
