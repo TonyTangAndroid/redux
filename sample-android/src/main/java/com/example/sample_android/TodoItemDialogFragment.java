@@ -22,6 +22,9 @@ import java.util.Objects;
 
 public class TodoItemDialogFragment extends DialogFragment {
 
+    MainStore store;
+    int id;
+
     public static TodoItemDialogFragment newInstance() {
         return newInstance(-1);
     }
@@ -33,9 +36,6 @@ public class TodoItemDialogFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    MainStore store;
-    int id;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

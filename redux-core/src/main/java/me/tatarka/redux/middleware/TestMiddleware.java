@@ -1,11 +1,11 @@
 package me.tatarka.redux.middleware;
 
-import me.tatarka.redux.Dispatcher;
-import me.tatarka.redux.Store;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import me.tatarka.redux.Dispatcher;
+import me.tatarka.redux.Store;
 
 /**
  * A middleware that records all actions and states, allowing you to easily check them in tests.

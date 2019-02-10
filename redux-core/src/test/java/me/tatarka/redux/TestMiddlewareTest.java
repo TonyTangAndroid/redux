@@ -1,10 +1,10 @@
 package me.tatarka.redux;
 
-import me.tatarka.redux.middleware.TestMiddleware;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import me.tatarka.redux.middleware.TestMiddleware;
 
 import static org.junit.Assert.assertEquals;
 

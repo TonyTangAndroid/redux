@@ -1,6 +1,12 @@
 package com.example.sample_android.reducer;
 
-import com.example.sample_android.action.*;
+import com.example.sample_android.action.Action;
+import com.example.sample_android.action.Add;
+import com.example.sample_android.action.Check;
+import com.example.sample_android.action.Edit;
+import com.example.sample_android.action.Load;
+import com.example.sample_android.action.Remove;
+import com.example.sample_android.action.UpdateItem;
 import com.example.sample_android.state.TodoItem;
 import com.example.sample_android.state.TodoList;
 

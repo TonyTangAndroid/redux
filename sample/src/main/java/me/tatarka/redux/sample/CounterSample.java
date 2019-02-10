@@ -1,6 +1,9 @@
 package me.tatarka.redux.sample;
 
-import me.tatarka.redux.*;
+import me.tatarka.redux.Dispatcher;
+import me.tatarka.redux.Reducer;
+import me.tatarka.redux.Reducers;
+import me.tatarka.redux.SimpleStore;
 import me.tatarka.redux.rx.ObservableAdapter;
 
 public class CounterSample {
@@ -16,7 +19,17 @@ public class CounterSample {
 
     // actions
 
-    interface Action {}
+    public static void main(String[] args) {
+        SimpleStore<Integer> store = new SimpleStore<>(0);
+        Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(store, counter)
+                .chain(new LogMiddleware<>(store));
+        ObservableAdapter.observable(store).subscribe(count -> System.out.println("state: " + count));
+        dispatcher.dispatch(new Increment());
+        dispatcher.dispatch(new Add(2));
+    }
+
+    interface Action {
+    }
 
     static class Increment implements Action {
         @Override
@@ -36,14 +49,5 @@ public class CounterSample {
         public String toString() {
             return "Add(" + value + ")";
         }
-    }
-
-    public static void main(String[] args) {
-        SimpleStore<Integer> store = new SimpleStore<>(0);
-        Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(store, counter)
-                .chain(new LogMiddleware<>(store));
-        ObservableAdapter.observable(store).subscribe(count -> System.out.println("state: " + count));
-        dispatcher.dispatch(new Increment());
-        dispatcher.dispatch(new Add(2));
     }
 }

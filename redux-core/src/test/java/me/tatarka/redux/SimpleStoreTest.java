@@ -44,7 +44,7 @@ public class SimpleStoreTest {
         final SimpleStore<String> store = new SimpleStore<>("test1");
         TestListener<String> testListener = new TestListener<String>() {
             int count = 0;
-            
+
             @Override
             public void onNewState(String state) {
                 super.onNewState(state);

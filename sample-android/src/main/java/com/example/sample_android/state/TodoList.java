@@ -15,7 +15,7 @@ public abstract class TodoList {
     public static TodoList create(boolean loading, List<TodoItem> items) {
         return new AutoValue_TodoList(loading, Collections.unmodifiableList(items));
     }
-    
+
     public abstract boolean loading();
 
     public abstract List<TodoItem> items();

@@ -37,6 +37,19 @@ public class LiveDataAdapter {
             setValue(store.getState());
         }
 
+        private static boolean isMainThread() {
+            return Thread.currentThread() == Looper.getMainLooper().getThread();
+        }
+
+        private static void appendStacktrace(Throwable e, Throwable context) {
+            StackTraceElement[] originalStacktrace = e.getStackTrace();
+            StackTraceElement[] additionalStacktrace = context.getStackTrace();
+            StackTraceElement[] combinedStacktrace = new StackTraceElement[originalStacktrace.length + additionalStacktrace.length];
+            System.arraycopy(originalStacktrace, 0, combinedStacktrace, 0, originalStacktrace.length);
+            System.arraycopy(additionalStacktrace, 0, combinedStacktrace, originalStacktrace.length, additionalStacktrace.length);
+            e.setStackTrace(combinedStacktrace);
+        }
+
         @Override
         protected void onActive() {
             store.addListener(this);
@@ -72,19 +85,6 @@ public class LiveDataAdapter {
                 }
                 postValue(state);
             }
-        }
-
-        private static boolean isMainThread() {
-            return Thread.currentThread() == Looper.getMainLooper().getThread();
-        }
-
-        private static void appendStacktrace(Throwable e, Throwable context) {
-            StackTraceElement[] originalStacktrace = e.getStackTrace();
-            StackTraceElement[] additionalStacktrace = context.getStackTrace();
-            StackTraceElement[] combinedStacktrace = new StackTraceElement[originalStacktrace.length + additionalStacktrace.length];
-            System.arraycopy(originalStacktrace, 0, combinedStacktrace, 0, originalStacktrace.length);
-            System.arraycopy(additionalStacktrace, 0, combinedStacktrace, originalStacktrace.length, additionalStacktrace.length);
-            e.setStackTrace(combinedStacktrace);
         }
     }
 }

@@ -5,7 +5,6 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Cancellable;
-
 import me.tatarka.redux.SimpleStore;
 
 /**

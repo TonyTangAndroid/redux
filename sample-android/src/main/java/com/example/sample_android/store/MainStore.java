@@ -8,7 +8,12 @@ import com.example.sample_android.middleware.PersistenceMiddleware;
 import com.example.sample_android.reducer.TodoListReducers;
 import com.example.sample_android.state.TodoList;
 
-import me.tatarka.redux.*;
+import me.tatarka.redux.Dispatcher;
+import me.tatarka.redux.Reducer;
+import me.tatarka.redux.ReplayMiddleware;
+import me.tatarka.redux.SimpleStore;
+import me.tatarka.redux.Thunk;
+import me.tatarka.redux.ThunkDispatcher;
 import me.tatarka.redux.android.LogMiddleware;
 import me.tatarka.redux.monitor.MonitorMiddleware;
 

@@ -1,9 +1,9 @@
 package me.tatarka.redux;
 
-import me.tatarka.redux.middleware.Middleware;
-
 import java.util.Arrays;
 import java.util.Iterator;
+
+import me.tatarka.redux.middleware.Middleware;
 
 /**
  * Dispatches actions with {@link Reducer}s and updates the state in the {@link Store}. You can chain {@link Middleware}

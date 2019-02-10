@@ -10,6 +10,38 @@ public class CompositeStateSample {
 
     // state
 
+    static Reducer<Integer, Increment> increment = (state, action) -> state + 1;
+
+    // reducers
+    static Reducer<Person, Action> updatePerson = Reducers.<Person, Action>matchClass()
+            .when(ChangeName.class, (state, action) -> new Person(CompositeStateSample.<String>replace().reduce(state.name, action), state.age))
+            .when(IncrementAge.class, (state, action) -> new Person(state.name, increment.reduce(state.age, action)));
+
+    static <T> Reducer<T, Replace<T>> replace() {
+        return (state, action) -> action.newValue();
+    }
+
+    public static void main(String[] args) {
+        SimpleStore<Person> store = new SimpleStore<>(new Person("nobody", 0));
+        Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(store, updatePerson)
+                .chain(new LogMiddleware<>(store));
+        ObservableAdapter.observable(store).subscribe(person -> System.out.println("state: " + person));
+        dispatcher.dispatch(new ChangeName("Bob"));
+        dispatcher.dispatch(new IncrementAge());
+    }
+
+    // actions
+
+    interface Action {
+    }
+
+    interface Replace<T> extends Action {
+        T newValue();
+    }
+
+    interface Increment extends Action {
+    }
+
     static class Person {
         final String name;
         final int age;
@@ -23,29 +55,6 @@ public class CompositeStateSample {
         public String toString() {
             return "Person(" + name + ", " + age + ")";
         }
-    }
-
-    // reducers
-
-    static <T> Reducer<T, Replace<T>> replace() {
-        return (state, action) -> action.newValue();
-    }
-
-    static Reducer<Integer, Increment> increment = (state, action) -> state + 1;
-
-    static Reducer<Person, Action> updatePerson = Reducers.<Person, Action>matchClass()
-            .when(ChangeName.class, (state, action) -> new Person(CompositeStateSample.<String>replace().reduce(state.name, action), state.age))
-            .when(IncrementAge.class, (state, action) -> new Person(state.name, increment.reduce(state.age, action)));
-
-    // actions
-
-    interface Action {}
-
-    interface Replace<T> extends Action {
-        T newValue();
-    }
-
-    interface Increment extends Action {
     }
 
     static class ChangeName implements Replace<String> {
@@ -72,14 +81,5 @@ public class CompositeStateSample {
             return "IncrementAge";
         }
 
-    }
-
-    public static void main(String[] args) {
-        SimpleStore<Person> store = new SimpleStore<>(new Person("nobody", 0));
-        Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(store, updatePerson)
-                .chain(new LogMiddleware<>(store));
-        ObservableAdapter.observable(store).subscribe(person -> System.out.println("state: " + person));
-        dispatcher.dispatch(new ChangeName("Bob"));
-        dispatcher.dispatch(new IncrementAge());
     }
 }

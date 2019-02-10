@@ -2,13 +2,10 @@ package com.example.sample_android.action;
 
 import com.example.sample_android.Datastore;
 import com.example.sample_android.state.TodoItem;
-import com.example.sample_android.state.TodoList;
 
 import java.util.List;
 
-import com.example.sample_android.store.MainStore;
 import me.tatarka.redux.Dispatcher;
-import me.tatarka.redux.Store;
 import me.tatarka.redux.Thunk;
 
 public class LoadActionCreator {

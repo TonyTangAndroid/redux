@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import me.tatarka.redux.Dispatcher;
 import me.tatarka.redux.Reducer;
 import me.tatarka.redux.SimpleStore;
-
 import rx.Observable;
 import rx.Single;
 import rx.functions.Action0;

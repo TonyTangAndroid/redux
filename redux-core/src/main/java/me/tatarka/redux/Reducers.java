@@ -98,8 +98,8 @@ public class Reducers {
         @Override
         @SuppressWarnings("unchecked")
         public S reduce(S state, A action) {
-            for(int i = 0; i < matchers.size(); i++) {
-                if(match(matchers.get(i), action)) {
+            for (int i = 0; i < matchers.size(); i++) {
+                if (match(matchers.get(i), action)) {
                     return (S) reducers.get(i).reduce(state, action);
                 }
             }

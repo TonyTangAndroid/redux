@@ -7,11 +7,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SimpleStore<S> implements Store<S> {
 
-    private volatile S state;
     private final CopyOnWriteArrayList<Listener<S>> listeners = new CopyOnWriteArrayList<>();
+    private volatile S state;
 
     public SimpleStore(S initialState) {
         setState(initialState);
+    }
+
+    private static boolean equals(Object var0, Object var1) {
+        return var0 == var1 || var0 != null && var0.equals(var1);
     }
 
     @Override
@@ -50,10 +54,6 @@ public class SimpleStore<S> implements Store<S> {
          * Called when a new state is set. This is called on the same thread as  or {@link #setState(Object)}.
          */
         void onNewState(S state);
-    }
-
-    private static boolean equals(Object var0, Object var1) {
-        return var0 == var1 || var0 != null && var0.equals(var1);
     }
 }
 

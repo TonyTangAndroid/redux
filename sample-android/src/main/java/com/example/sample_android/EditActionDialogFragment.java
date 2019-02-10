@@ -29,6 +29,8 @@ public class EditActionDialogFragment extends DialogFragment {
     private static final String TAG = "EditActionDialogFragment";
 
     private static final UnsafeAllocator unsafe = UnsafeAllocator.create();
+    ReplayMiddleware<TodoList, Action, Action> middleware;
+    int index;
 
     public static EditActionDialogFragment newInstance(int index) {
         Bundle args = new Bundle();
@@ -38,8 +40,37 @@ public class EditActionDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    ReplayMiddleware<TodoList, Action, Action> middleware;
-    int index;
+    private static TextInputLayout createInput(Context context, Field field, Object action) {
+        try {
+            field.setAccessible(true);
+            String name = field.getName();
+            Object value = field.get(action);
+            String valueStr = value != null ? value.toString() : null;
+
+            TextInputLayout layout = new TextInputLayout(context);
+            layout.setHint(name);
+            TextInputEditText editText = new TextInputEditText(context);
+            editText.setText(valueStr);
+            layout.setTag(field);
+            layout.addView(editText, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            return layout;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Object toType(Field field, String value) {
+        if (field.getType() == String.class) {
+            return value;
+        }
+        if (field.getType() == int.class || field.getType() == Integer.class) {
+            return Integer.parseInt(value);
+        }
+        if (field.getType() == boolean.class || field.getType() == Boolean.class) {
+            return Boolean.parseBoolean(value);
+        }
+        throw new RuntimeException("Cannot covert string to type: " + field.getType());
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,37 +116,5 @@ public class EditActionDialogFragment extends DialogFragment {
             Log.e(TAG, e.getMessage(), e);
             Toast.makeText(getContext(), "Error changing action " + action.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private static TextInputLayout createInput(Context context, Field field, Object action) {
-        try {
-            field.setAccessible(true);
-            String name = field.getName();
-            Object value = field.get(action);
-            String valueStr = value != null ? value.toString() : null;
-
-            TextInputLayout layout = new TextInputLayout(context);
-            layout.setHint(name);
-            TextInputEditText editText = new TextInputEditText(context);
-            editText.setText(valueStr);
-            layout.setTag(field);
-            layout.addView(editText, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            return layout;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static Object toType(Field field, String value) {
-        if (field.getType() == String.class) {
-            return value;
-        }
-        if (field.getType() == int.class || field.getType() == Integer.class) {
-            return Integer.parseInt(value);
-        }
-        if (field.getType() == boolean.class || field.getType() == Boolean.class) {
-            return Boolean.parseBoolean(value);
-        }
-        throw new RuntimeException("Cannot covert string to type: " + field.getType());
     }
 }
