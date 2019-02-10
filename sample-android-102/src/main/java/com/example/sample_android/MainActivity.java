@@ -6,18 +6,17 @@ import android.widget.ProgressBar;
 
 import com.example.sample_android.action.Action;
 import com.example.sample_android.action.Load;
-import com.example.sample_android.state.TodoItem;
 import com.example.sample_android.state.TodoList;
 import com.example.sample_android.store.MainStore;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import me.tatarka.redux.Dispatcher;
+import io.reactivex.Single;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
         store = viewModel.getStore();
 
         if (savedInstanceState == null) {
-            store.dispatch(dispatcher -> new Datastore(this).get(items -> dispatch(dispatcher, items)));
+            store.dispatch(Single.fromCallable(this::load).delay(1000, TimeUnit.MILLISECONDS));
         }
         viewModel.getState().observe(this, this::render);
     }
 
-    private void dispatch(Dispatcher<Action, Action> dispatcher, List<TodoItem> items) {
-        dispatcher.dispatch(Load.create(items));
+    private Action load() {
+        return Load.create(new Datastore(this).getTodoItems());
     }
 
     private void render(TodoList data) {

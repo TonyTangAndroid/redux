@@ -4,28 +4,30 @@ import com.example.sample_android.action.Action;
 import com.example.sample_android.reducer.TodoListReducers;
 import com.example.sample_android.state.TodoList;
 
+import io.reactivex.Single;
 import me.tatarka.redux.Dispatcher;
 import me.tatarka.redux.Reducer;
 import me.tatarka.redux.SimpleStore;
-import me.tatarka.redux.Thunk;
-import me.tatarka.redux.ThunkDispatcher;
+import me.tatarka.redux.rx2.SingleDispatcher;
 
-/**
- * To keep everything together, you can subclass {@link SimpleStore} and add your own {@code dispatch()} methods to it.
- */
 public class MainStore extends SimpleStore<TodoList> {
 
-    private final Dispatcher<Thunk<Action, Action>, Void> thunkDispatcher;
+    private final SingleDispatcher<Action> singleDispatcher;
 
     public MainStore() {
         super(TodoList.initial());
         Reducer<TodoList, Action> reducer = TodoListReducers.reducer();
         Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(this, reducer);
-        thunkDispatcher = new ThunkDispatcher<>(dispatcher);
+
+        {
+            singleDispatcher = new SingleDispatcher<>(dispatcher);
+//            TestSubscriber<TodoList> testSubscriber = FlowableAdapter.flowable(store).test();
+//            testSubscriber.assertSubscribed();
+        }
     }
 
-    public void dispatch(Thunk<Action, Action> thunk) {
-        thunkDispatcher.dispatch(thunk);
+    public void dispatch(Single<Action> single) {
+        singleDispatcher.dispatch(single);
     }
 
 }
