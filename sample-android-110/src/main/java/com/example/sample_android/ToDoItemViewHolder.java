@@ -1,7 +1,5 @@
 package com.example.sample_android;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -10,6 +8,9 @@ import com.example.sample_android.action.Check;
 import com.example.sample_android.action.Remove;
 import com.example.sample_android.state.TodoItem;
 import com.example.sample_android.store.MainStore;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 class ToDoItemViewHolder extends RecyclerView.ViewHolder {
     final MainStore store;
@@ -28,7 +29,8 @@ class ToDoItemViewHolder extends RecyclerView.ViewHolder {
 
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (item.done() != isChecked) {
-                store.dispatch(Check.create(item.id(), isChecked));
+                Check action = Check.create(item.id(), isChecked);
+                store.dispatch(action);
             }
         });
 

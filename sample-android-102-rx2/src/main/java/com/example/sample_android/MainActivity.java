@@ -5,12 +5,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.sample_android.action.Action;
-import com.example.sample_android.action.Load;
+import com.example.sample_android.action.LoadActionCreator;
 import com.example.sample_android.state.TodoList;
 import com.example.sample_android.store.MainStore;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -44,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
         store = viewModel.getStore();
 
         if (savedInstanceState == null) {
-            store.dispatch(Single.fromCallable(this::load).delay(1000, TimeUnit.MILLISECONDS));
+            final Datastore datastore = new Datastore(this);
+            LoadActionCreator loadActionCreator = new LoadActionCreator(datastore);
+            Single<Action> single = loadActionCreator.load();
+            store.dispatch(single);
         }
         viewModel.getState().observe(this, this::render);
     }
 
-    private Action load() {
-        return Load.create(new Datastore(this).getTodoItems());
-    }
 
     private void render(TodoList data) {
         loading.setVisibility(data.loading() ? View.VISIBLE : View.GONE);

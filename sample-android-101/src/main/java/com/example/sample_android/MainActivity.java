@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         store = viewModel.getStore();
 
         if (savedInstanceState == null) {
-            Thunk<Action, Action> thunk = new LoadActionCreator(new Datastore(this)).load();
+            Datastore datastore = new Datastore(this);
+            LoadActionCreator loadActionCreator = new LoadActionCreator(datastore);
+            Thunk<Action, Action> thunk = loadActionCreator.load();
             store.dispatch(thunk);
         }
 
