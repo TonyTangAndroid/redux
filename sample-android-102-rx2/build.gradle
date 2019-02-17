@@ -42,6 +42,9 @@ android {
 dependencies {
 //    api project(':redux-rx2')
 //    api project(':redux-android-lifecycle')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
     implementation 'com.github.TonyTangAndroid.redux:redux-rx2:0.1.1'
     implementation 'com.github.TonyTangAndroid.redux:redux-android-lifecycle:0.1.1'
     compile 'com.google.dagger:dagger:2.21'

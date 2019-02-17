@@ -10,6 +10,7 @@ import dagger.android.AndroidInjectionModule;
 @Component(modules = {AndroidInjectionModule.class,
         ViewModelModule.class,
         ContextModule.class,
+        ThreadModule.class,
         ActivityModule.class
 })
 public interface AppComponent {
