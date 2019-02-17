@@ -1,11 +1,13 @@
 package com.example.sample_android;
 
+import android.app.Application;
+
+import com.example.sample_android.store.MainStore;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import javax.inject.Provider;
 
 import androidx.lifecycle.ViewModel;
 import dagger.MapKey;
@@ -21,8 +23,8 @@ public class ViewModelModule {
     @Provides
     @IntoMap
     @ViewModelKey(TodoViewModel.class)
-    ViewModel noteBeanAndroidViewModel(Provider<TodoViewModel> provider) {
-        return provider.get();
+    ViewModel noteBeanAndroidViewModel(Application application, MainStore store) {
+        return new TodoViewModel(application, store);
     }
 
     @Target(ElementType.METHOD)
