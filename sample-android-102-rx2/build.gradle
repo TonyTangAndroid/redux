@@ -40,8 +40,11 @@ android {
 }
 
 dependencies {
-    api project(':redux-rx2')
-    api project(':redux-android-lifecycle')
+//    api project(':redux-rx2')
+//    api project(':redux-android-lifecycle')
+    implementation 'com.github.TonyTangAndroid.redux:redux-rx2:0.1.1'
+    implementation 'com.github.TonyTangAndroid.redux:redux-android-lifecycle:0.1.1'
+
     api 'androidx.appcompat:appcompat:1.1.0-alpha02'
     api 'com.google.android.material:material:1.1.0-alpha03'
     api 'com.google.auto.value:auto-value-annotations:1.6.3'
