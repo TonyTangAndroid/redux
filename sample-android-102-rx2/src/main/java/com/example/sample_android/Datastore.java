@@ -1,23 +1,25 @@
 package com.example.sample_android;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.sample_android.state.TodoItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+@AppScope
 public class Datastore {
 
-    // poor-man's persistence
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
-    public Datastore(Context context) {
-        prefs = context.getSharedPreferences("datastore", Context.MODE_PRIVATE);
+    @Inject
+    public Datastore(SharedPreferences prefs) {
+        this.prefs = prefs;
     }
-
 
     public List<TodoItem> getTodoItems() {
         String[] data = Objects.requireNonNull(prefs.getString("data", "")).split(",");
@@ -31,7 +33,11 @@ public class Datastore {
                 items.add(TodoItem.create(id, text, done));
             }
         }
-        return items;
+        return items.size() == 0 ? Collections.singletonList(hardCode()) : items;
+    }
+
+    private TodoItem hardCode() {
+        return TodoItem.create(1, "123", false);
     }
 
 }

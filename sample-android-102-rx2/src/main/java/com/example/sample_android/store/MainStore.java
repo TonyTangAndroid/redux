@@ -1,8 +1,9 @@
 package com.example.sample_android.store;
 
 import com.example.sample_android.action.Action;
-import com.example.sample_android.reducer.TodoListReducers;
 import com.example.sample_android.state.TodoList;
+
+import javax.inject.Inject;
 
 import io.reactivex.Single;
 import me.tatarka.redux.Dispatcher;
@@ -12,17 +13,17 @@ import me.tatarka.redux.rx2.SingleDispatcher;
 
 public class MainStore extends SimpleStore<TodoList> {
 
-    private final SingleDispatcher<Action> singleDispatcher;
+    private final SingleDispatcher<Action> dispatcher;
 
-    public MainStore() {
-        super(TodoList.initial());
-        Reducer<TodoList, Action> reducer = TodoListReducers.reducer();
+    @Inject
+    public MainStore(TodoList initialState, Reducer<TodoList, Action> reducer) {
+        super(initialState);
         Dispatcher<Action, Action> dispatcher = Dispatcher.forStore(this, reducer);
-        singleDispatcher = new SingleDispatcher<>(dispatcher);
+        this.dispatcher = new SingleDispatcher<>(dispatcher);
     }
 
     public void dispatch(Single<Action> single) {
-        singleDispatcher.dispatch(single);
+        dispatcher.dispatch(single);
     }
 
 }
