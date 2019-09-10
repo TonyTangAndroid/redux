@@ -1,18 +1,17 @@
 package com.example.sample_android;
 
-import android.app.Activity;
 import android.app.Application;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.HasAndroidInjector;
 
-public class App extends Application implements HasActivityInjector {
+public class App extends Application implements HasAndroidInjector {
 
     @Inject
-    DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
+    DispatchingAndroidInjector<Object> activityDispatchingAndroidInjector;
 
 
     @Override
@@ -22,7 +21,7 @@ public class App extends Application implements HasActivityInjector {
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
+    public AndroidInjector<Object> androidInjector() {
         return activityDispatchingAndroidInjector;
     }
 }

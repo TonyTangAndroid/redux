@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = findViewById(R.id.fab);
-        fab.setVisibility(View.GONE);
+        fab.hide();
 
         RecyclerView list = findViewById(R.id.list);
         list.setAdapter(adapter);
