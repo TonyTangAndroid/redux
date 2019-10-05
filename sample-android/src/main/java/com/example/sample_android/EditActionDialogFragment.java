@@ -26,7 +26,7 @@ import me.tatarka.redux.ReplayMiddleware;
 
 public class EditActionDialogFragment extends DialogFragment {
 
-    private static final String TAG = "EditActionDialogFragment";
+    private static final String TAG = "EditAction";
 
     private static final UnsafeAllocator unsafe = UnsafeAllocator.create();
     ReplayMiddleware<TodoList, Action, Action> middleware;
